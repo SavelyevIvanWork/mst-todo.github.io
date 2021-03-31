@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/mst-todo.github.io/static/css/main.9d5b29c0.chunk.css",
+    "main.js": "/mst-todo.github.io/static/js/main.6683d182.chunk.js",
+    "main.js.map": "/mst-todo.github.io/static/js/main.6683d182.chunk.js.map",
+    "runtime-main.js": "/mst-todo.github.io/static/js/runtime-main.cb5c3b9c.js",
+    "runtime-main.js.map": "/mst-todo.github.io/static/js/runtime-main.cb5c3b9c.js.map",
+    "static/js/2.7bcf8176.chunk.js": "/mst-todo.github.io/static/js/2.7bcf8176.chunk.js",
+    "static/js/2.7bcf8176.chunk.js.map": "/mst-todo.github.io/static/js/2.7bcf8176.chunk.js.map",
+    "index.html": "/mst-todo.github.io/index.html",
+    "static/css/main.9d5b29c0.chunk.css.map": "/mst-todo.github.io/static/css/main.9d5b29c0.chunk.css.map",
+    "static/js/2.7bcf8176.chunk.js.LICENSE.txt": "/mst-todo.github.io/static/js/2.7bcf8176.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cb5c3b9c.js",
+    "static/js/2.7bcf8176.chunk.js",
+    "static/css/main.9d5b29c0.chunk.css",
+    "static/js/main.6683d182.chunk.js"
+  ]
+}

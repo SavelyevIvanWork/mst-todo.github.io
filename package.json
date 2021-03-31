@@ -2,6 +2,7 @@
   "name": "mst-todo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://savelyevivanwork.github.io/mst-todo.github.io/",
   "dependencies": {
     "@rooks/use-outside-click": "^4.10.0",
     "@testing-library/jest-dom": "^5.11.10",
@@ -22,7 +23,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

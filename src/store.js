@@ -1,30 +1,16 @@
+import makeInspectable from 'mobx-devtools-mst';
 import RootStore from "./models/RootStore";
 
 const store = RootStore.create({
+    todos: {
+        'todo-1': {},
+        'todo-2': {},
+        'todo-3': {}
+    },
     columns: {
-        'column-1': {
-            todos: {
-                'todo-1': {
-                },
-                'todo-2': {
-                },
-                'todo-3': {
-                }
-            }
-        },
-        'column-2': {
-            todos: {
-                'todo-1': {
-                }
-            }
-        },
-        'column-3': {
-            todos: {
-                'todo-1': {
-                }
-            }
-        }
-    }
+        'column-1': {},
+    },
+    columnOrder: [{}]
 });
 
-export default store
+export default makeInspectable(store)

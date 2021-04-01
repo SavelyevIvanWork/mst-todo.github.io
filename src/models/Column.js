@@ -4,11 +4,10 @@ import Todo from "./Todo";
 
 
 const Column = types.model('Column', {
-    id: types.optional(types.string, () => `column-${uuidv4()}`),
+    id: types.optional(types.identifier, () => `column-${uuidv4()}`),
     title: types.optional(types.string, 'Untitled'),
     newTitle: types.optional(types.string, ''),
     checkedTitle: types.optional(types.boolean, false),
-    todos: types.map(Todo)
 })
     .actions(self => {
         function clickTitle() {

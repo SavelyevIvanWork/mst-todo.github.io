@@ -25,7 +25,6 @@ const TitleInput = observer(({column}) => {
     function outsidePClick() {
         column.closedTitleInput()
     }
-
     useOutsideClick(inputRef, outsidePClick);
 
     const inputChangeHandler = (e) => {

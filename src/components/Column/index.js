@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import Todo from "../Todo";
 import {values} from "mobx";
 import TitleInput from "./TitleInput";
+import {Draggable, Droppable} from "react-beautiful-dnd";
+import {useContext} from "react";
+import {StoreContext} from "../../index";
 
 const Container = styled.div`
   display: flex;
@@ -22,23 +25,32 @@ const Title = styled.h3`
 `
 
 const Column = observer( ({column}) => {
-
+const {todos} = useContext(StoreContext)
+    console.log(values(todos).map(todo => todo))
 
     return (
-        <Container>
-            {
-                column.checkedTitle
-                    ? <TitleInput column={column} ></TitleInput>
-                    : <Title onClick={() => column.clickTitle()}
-                    >{column.title}</Title>
-            }
+        <Draggable draggableId={column.id} >
+            {(provided, snapshot) => (
+                <Container
+                    {...provided.draggableProps}
+                    ref={provided.innerRef}
+                    isDragging={snapshot.isDragging}>
+                    {
+                        column.checkedTitle
+                            ? <TitleInput column={column} ></TitleInput>
+                            : <Title onClick={() => column.clickTitle()}
+                            >{column.title}</Title>
+                    }
 
-            {
-                values(column.todos).map(todo => {
-                    return <Todo key={todo.id} todo={todo}/>
-                })
-            }
-        </Container>
+                    {
+                        values(todos).map(todo => {
+                            return <Todo key={todo.id} todo={todo}/>
+                        })
+                    }
+                </Container>
+            )}
+        </Draggable>
+
     )
 })
 

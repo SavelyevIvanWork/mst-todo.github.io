@@ -5,6 +5,7 @@ import Column from "./components/Column";
 import {useContext} from "react";
 import {StoreContext} from "./index";
 import styled from "styled-components";
+import {DragDropContext, Droppable} from "react-beautiful-dnd";
 
 const Container = styled.div`
   position: relative;
@@ -14,17 +15,33 @@ const Container = styled.div`
 `
 
 const App = observer(() => {
-    const store = useContext(StoreContext)
+    const {columns, columnOrder} = useContext(StoreContext)
     // console.log(store.columns.get('column-1'))
     return (
-        <Container>
-        {
-            values(store.columns).map(column => {
-                return <Column key={column.id} column={column}/>
-            })
-        }
-       </Container>
+        <DragDropContext>
+            <Droppable droppableId={'all-columns'} direction='horizontal' type={'column'}>
+                {(provided, snapshot) => (
+                    <Container
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        isDraggingOver={snapshot.isDraggingOver}
+                    >
+                        {
+                            values(columns).map(column => {
+                                columnOrder.map(columnId => {
+                                    columnId.getColumnIds(column.id)
+                                })
+                                return <Column key={column.id} column={column}/>
+                            })
+                        }
+                        {provided.placeholder}
+                    </Container>
+                )}
+
+            </Droppable>
+        </DragDropContext>
     )
 })
 
 export default App
+

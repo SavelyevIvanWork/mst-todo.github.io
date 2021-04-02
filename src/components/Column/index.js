@@ -24,9 +24,7 @@ const Title = styled.h3`
   border-bottom: 1px solid lightgrey;
 `
 
-const Column = observer( ({column}) => {
-const {todos} = useContext(StoreContext)
-    console.log(values(todos).map(todo => todo))
+const Column = observer( ({column, todos}) => {
 
     return (
         <Draggable draggableId={column.id} >
@@ -43,7 +41,7 @@ const {todos} = useContext(StoreContext)
                     }
 
                     {
-                        values(todos).map(todo => {
+                        todos.map(todo => {
                             return <Todo key={todo.id} todo={todo}/>
                         })
                     }

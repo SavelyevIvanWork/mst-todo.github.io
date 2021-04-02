@@ -8,6 +8,7 @@ const Column = types.model('Column', {
     title: types.optional(types.string, 'Untitled'),
     newTitle: types.optional(types.string, ''),
     checkedTitle: types.optional(types.boolean, false),
+    todoIds: types.array(types.string)
 })
     .actions(self => {
         function clickTitle() {

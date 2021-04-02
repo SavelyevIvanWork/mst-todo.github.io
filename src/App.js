@@ -1,6 +1,6 @@
 import './App.css'
-import {observer} from "mobx-react-lite";
-import {values} from "mobx";
+import {observer, Observer} from "mobx-react-lite";
+import {autorun, values} from "mobx";
 import Column from "./components/Column";
 import {useContext} from "react";
 import {StoreContext} from "./index";
@@ -15,31 +15,42 @@ const Container = styled.div`
 `
 
 const App = observer(() => {
-    const {columns, columnOrder} = useContext(StoreContext)
+    const store = useContext(StoreContext)
+    const {columns, todos, columnOrder} = store
     // console.log(store.columns.get('column-1'))
     return (
-        <DragDropContext>
-            <Droppable droppableId={'all-columns'} direction='horizontal' type={'column'}>
-                {(provided, snapshot) => (
-                    <Container
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        isDraggingOver={snapshot.isDraggingOver}
-                    >
-                        {
-                            values(columns).map(column => {
-                                columnOrder.map(columnId => {
-                                    columnId.getColumnIds(column.id)
-                                })
-                                return <Column key={column.id} column={column}/>
-                            })
-                        }
-                        {provided.placeholder}
-                    </Container>
-                )}
 
-            </Droppable>
-        </DragDropContext>
+
+        <DragDropContext>
+
+                <Droppable droppableId={'all-columns'} direction='horizontal' type={'column'}>
+
+                    {(provided, snapshot) => (
+
+                            <Container
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                isDraggingOver={snapshot.isDraggingOver}
+                            >
+                                {columnOrder.map((columnId, index) => {
+                                    const column = columns.get(columnId)
+                                    const columnTodos = column.todoIds.map(todoId => todos.get(todoId))
+                                    return <Column key={column.id} column={column} todos={columnTodos} index={index}
+                                    />
+                                })}
+                                {provided.placeholder}
+                                <button onClick={(e) => {
+                                    // e.preventDefault()
+                                    store.addColumn()
+                                }}
+                                >Add column</button>
+                            </Container>
+
+
+                    )}
+
+                </Droppable>
+            </DragDropContext>
     )
 })
 

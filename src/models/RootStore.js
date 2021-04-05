@@ -20,7 +20,12 @@ const RootStore = types.model({
             self.columnOrder.push(columnId)
         }
 
-        return {getColumnIds, addColumn}
+        function columnOrderUpdate(result) {
+            self.columnOrder.splice(result.source.index, 1)
+            self.columnOrder.splice(result.destination.index, 0, result.draggableId)
+        }
+
+        return {getColumnIds, addColumn, columnOrderUpdate}
     })
 
 export default RootStore

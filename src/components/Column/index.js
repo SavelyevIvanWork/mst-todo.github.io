@@ -4,51 +4,68 @@ import Todo from "../Todo";
 import {values} from "mobx";
 import TitleInput from "./TitleInput";
 import {Draggable, Droppable} from "react-beautiful-dnd";
-import {useContext} from "react";
+import {useContext, useLayoutEffect, useRef} from "react";
 import {StoreContext} from "../../index";
+import Title from "./Title";
+
+const Wrapper = styled.section`
+  margin: 0 10px;
+  background-color: inherit;
+`
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20%;
+  width: 280px;
   max-height: 80vh;
-  margin: 10px;
   border: 1px solid lightgrey;
   border-radius: 5px;
   background-color: ${props => (props.isDragging ? 'gray' : 'white')};
 `
-const Title = styled.h3`
-  font-size: 20px;
-  margin: 0;
-  padding: 10px;
-  border-bottom: 1px solid lightgrey;
+
+const Shadow = styled.div`
+  position: absolute;
+  left: ${props => `${props.positionLeft}px`};
+  height: ${props => `${props.columnHeight}px`};
+  width: ${props => `${props.columnWidth}px`};
+  border-radius: 5px;
+  background-color: blue;
 `
 
-const Column = observer( ({column, todos}) => {
+const Column = observer(({column, todos, index, provided}) => {
+    const containerRef = useRef(null)
 
+    useLayoutEffect(() => {
+        const positionLeft = containerRef.current.offsetLeft
+        console.log(positionLeft)
+        const height = containerRef.current.clientHeight
+        const width = containerRef.current.clientWidth
+        column.getSizesColumn(width, height, positionLeft)
+    }, [column])
     return (
-        <Draggable draggableId={column.id} >
-            {(provided, snapshot) => (
-                <Container
-                    {...provided.draggableProps}
-                    ref={provided.innerRef}
-                    isDragging={snapshot.isDragging}>
-                    {
-                        column.checkedTitle
-                            ? <TitleInput column={column} ></TitleInput>
-                            : <Title onClick={() => column.clickTitle()}
-                            >{column.title}</Title>
-                    }
 
-                    {
-                        todos.map(todo => {
-                            return <Todo key={todo.id} todo={todo}/>
-                        })
-                    }
-                </Container>
-            )}
-        </Draggable>
+        <>
+            {column.shadow && <Shadow columnHeight={column.height} columnWidth={column.width} positionLeft={column.positionLeft} ></Shadow>}
+            <Draggable draggableId={column.id} index={index}>
 
+                {(provided, snapshot) => (
+                    <Wrapper ref={containerRef}>
+                    <Container
+                        {...provided.draggableProps}
+                        ref={provided.innerRef}
+                        isDragging={snapshot.isDragging}>
+                        <Title column={column} provided={provided}/>
+                        {
+                            todos.map(todo => {
+                                return <Todo key={todo.id} todo={todo}/>
+                            })
+                        }
+                    </Container>
+                    </Wrapper>
+                )}
+            </Draggable>
+
+        </>
     )
 })
 

@@ -10,7 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
       <StoreContext.Provider value={store}>
         <App />
-      </StoreContext.Provider>,
+      </StoreContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

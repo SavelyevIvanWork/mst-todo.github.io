@@ -1,12 +1,12 @@
 import {observer} from "mobx-react-lite"
 import styled from 'styled-components'
-import Todo from "../Todo";
-import {values} from "mobx";
-import TitleInput from "./TitleInput";
 import {Draggable, Droppable} from "react-beautiful-dnd";
-import {useContext, useLayoutEffect, useRef} from "react";
-import {StoreContext} from "../../index";
+import {useContext, useEffect, useLayoutEffect, useRef} from "react";
 import Title from "./Title";
+import AddTodo from "../Todo/AddTodo";
+import TodoList from "../Todo/TodoList";
+import {StoreContext} from "../../index";
+import ShadowColumn from "../ShadowColumn";
 
 const Wrapper = styled.section`
   margin: 0 10px;
@@ -14,6 +14,7 @@ const Wrapper = styled.section`
 `
 
 const Container = styled.div`
+  position: ${props => (props.isDragging ? 'absolute' : 'static')} !important;
   display: flex;
   flex-direction: column;
   width: 280px;
@@ -23,48 +24,42 @@ const Container = styled.div`
   background-color: ${props => (props.isDragging ? 'gray' : 'white')};
 `
 
-const Shadow = styled.div`
-  position: absolute;
-  left: ${props => `${props.positionLeft}px`};
-  height: ${props => `${props.columnHeight}px`};
-  width: ${props => `${props.columnWidth}px`};
-  border-radius: 5px;
-  background-color: blue;
-`
-
-const Column = observer(({column, todos, index, provided}) => {
+const Column = observer(({column, todos, index}) => {
+    const store = useContext(StoreContext)
     const containerRef = useRef(null)
 
     useLayoutEffect(() => {
-        const positionLeft = containerRef.current.offsetLeft
-        console.log(positionLeft)
-        const height = containerRef.current.clientHeight
-        const width = containerRef.current.clientWidth
-        column.getSizesColumn(width, height, positionLeft)
-    }, [column])
+        if (!store.isDragging) {
+            const positionLeft = containerRef.current.offsetLeft
+            const height = containerRef.current.clientHeight
+            const width = containerRef.current.clientWidth
+            column.getSizesColumn(width, height, positionLeft)
+        }
+
+    })
+
     return (
-
         <>
-            {column.shadow && <Shadow columnHeight={column.height} columnWidth={column.width} positionLeft={column.positionLeft} ></Shadow>}
             <Draggable draggableId={column.id} index={index}>
-
                 {(provided, snapshot) => (
                     <Wrapper ref={containerRef}>
-                    <Container
-                        {...provided.draggableProps}
-                        ref={provided.innerRef}
-                        isDragging={snapshot.isDragging}>
-                        <Title column={column} provided={provided}/>
-                        {
-                            todos.map(todo => {
-                                return <Todo key={todo.id} todo={todo}/>
-                            })
-                        }
-                    </Container>
+                        <Container
+                            {...provided.draggableProps}
+                            ref={provided.innerRef}
+                            isDragging={snapshot.isDragging}>
+                            <Title column={column} provided={provided}/>
+                            <Droppable droppableId={column.id} direction='vertical' type='card'>
+                                {(provided, snapshot) => {
+                                    return (<>
+                                        <TodoList provided={provided} snapshot={snapshot} todos={todos}/>
+                                    </>)
+                                }}
+                            </Droppable>
+                            <AddTodo column={column}/>
+                        </Container>
                     </Wrapper>
                 )}
             </Draggable>
-
         </>
     )
 })

@@ -1,5 +1,6 @@
 import {observer} from "mobx-react-lite";
 import styled from 'styled-components'
+import {Draggable} from "react-beautiful-dnd";
 
 const Container = styled.div`
   margin: 5px;
@@ -29,12 +30,23 @@ const Content = styled.p`
   padding: 5px
 `;
 
-const Todo = observer(({todo}) => {
+const Todo = observer(({todo, index}) => {
     return (
-        <Container>
-            <Title>{todo.title}</Title>
-            <Content>{todo.content}</Content>
-        </Container>
+        <Draggable draggableId={todo.id} index={index}>
+            {(provided, snapshot) => (
+                <Container
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                    isDragging={snapshot.isDragging}
+                >
+                    <Title>{todo.title}</Title>
+                    <Content>{todo.content}</Content>
+
+                    {provided.placeholder}
+                </Container>
+            )}
+        </Draggable>
     )
 })
 

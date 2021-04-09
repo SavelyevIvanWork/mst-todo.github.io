@@ -4,10 +4,12 @@
   "private": true,
   "homepage": "https://savelyevivanwork.github.io/mst-todo.github.io/",
   "dependencies": {
+    "@react-firebase/auth": "^0.2.10",
     "@rooks/use-outside-click": "^4.10.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
+    "firebase": "^8.3.3",
     "mobx": "latest",
     "mobx-devtools-mst": "^0.9.30",
     "mobx-react": "^7.1.0",
